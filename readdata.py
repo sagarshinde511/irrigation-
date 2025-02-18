@@ -53,7 +53,7 @@ def fetch_latest_data():
 
 # Main content after login
 st.title("IoT Sensor Dashboard")
-tabs = st.tabs(["Dashboard", "Settings", "About"])
+tabs = st.tabs(["Dashboard", "All Data", "About"])
 
 # Tab 1: Dashboard
 with tabs[0]:
@@ -75,8 +75,8 @@ with tabs[0]:
 
 # Tab 2: Settings
 with tabs[1]:
-    st.subheader("Settings")
-    st.write("Configuration options go here.")
+    st.subheader("Past Sensors Data")
+    st.write("Check All Past Data Here.")
 
 # Tab 3: About
 with tabs[2]:
