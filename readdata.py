@@ -42,7 +42,7 @@ def fetch_latest_data():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT id, dateTime, temp, humi, moi FROM Irrigation ORDER BY id DESC LIMIT 1")
+        cursor.execute("SELECT id, time, temp, humi, moi FROM Irrigation ORDER BY id DESC LIMIT 1")
         latest_data = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -61,6 +61,7 @@ with tabs[0]:
     latest_data = fetch_latest_data()
     
     if latest_data:
+        st.write(f"**Latest Data Timestamp:** {latest_data['time']}")
         col1, col2, col3 = st.columns(3)
         
         with col1:
