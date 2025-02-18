@@ -1,7 +1,16 @@
 import streamlit as st
 import pandas as pd
+import mysql.connector
 import random
 import time
+
+# Database credentials
+DB_CONFIG = {
+    "host": "82.180.143.66",
+    "user": "u263681140_students1",
+    "password": "testStudents@123",
+    "database": "u263681140_students1"
+}
 
 # Default login credentials
 USERNAME = "admin"
@@ -28,38 +37,40 @@ if not st.session_state.authenticated:
     st.warning("Please log in to access the dashboard.")
     st.stop()
 
+# Function to fetch latest sensor data
+def fetch_latest_data():
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT id, time, temp, humi, moi FROM Irrigation ORDER BY id DESC LIMIT 1")
+        latest_data = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return latest_data
+    except mysql.connector.Error as e:
+        st.error(f"Error connecting to database: {e}")
+        return None
+
 # Main content after login
 st.title("IoT Sensor Dashboard")
 tabs = st.tabs(["Dashboard", "Settings", "About"])
 
-# Generate random data for demonstration
-@st.cache_data
-def get_data():
-    return pd.DataFrame(
-        {
-            "Time": pd.date_range(start=pd.Timestamp.now(), periods=10, freq="S"),
-            "Temperature": [random.uniform(20, 35) for _ in range(10)],
-            "Humidity": [random.uniform(40, 80) for _ in range(10)],
-            "Moisture": [random.uniform(10, 50) for _ in range(10)],
-        }
-    )
-
 # Tab 1: Dashboard
 with tabs[0]:
     st.subheader("Live Sensor Data")
-    chart_data = get_data()
-    st.line_chart(chart_data.set_index("Time"))
+    latest_data = fetch_latest_data()
     
-    # Show last sensor data in circles
-    last_data = chart_data.iloc[-1]
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric(label="Temperature", value=f"{last_data['Temperature']:.2f}°C")
-    with col2:
-        st.metric(label="Humidity", value=f"{last_data['Humidity']:.2f}%")
-    with col3:
-        st.metric(label="Moisture", value=f"{last_data['Moisture']:.2f}%")
+    if latest_data:
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.metric(label="Temperature", value=f"{latest_data['temp']}°C")
+        with col2:
+            st.metric(label="Humidity", value=f"{latest_data['humi']}%")
+        with col3:
+            st.metric(label="Moisture", value=f"{latest_data['moi']}%")
+    else:
+        st.error("Failed to fetch latest sensor data.")
 
 # Tab 2: Settings
 with tabs[1]:
