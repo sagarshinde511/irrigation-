@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import mysql.connector
-import random
 import time
+import plotly.express as px
 
 # Database credentials
 DB_CONFIG = {
@@ -51,6 +51,20 @@ def fetch_latest_data():
         st.error(f"Error connecting to database: {e}")
         return None
 
+# Function to fetch all sensor data
+def fetch_all_data():
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT dateTime, temp, humi, moi FROM Irrigation ORDER BY dateTime ASC")
+        data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return pd.DataFrame(data)
+    except mysql.connector.Error as e:
+        st.error(f"Error connecting to database: {e}")
+        return None
+
 # Main content after login
 st.title("IoT Sensor Dashboard")
 tabs = st.tabs(["Dashboard", "All Data", "About"])
@@ -73,10 +87,26 @@ with tabs[0]:
     else:
         st.error("Failed to fetch latest sensor data.")
 
-# Tab 2: Settings
+# Tab 2: All Data
 with tabs[1]:
-    st.subheader("Past Sensors Data")
-    st.write("Check All Past Data Here.")
+    st.subheader("Past Sensor Data Visualization")
+    data = fetch_all_data()
+    
+    if data is not None and not data.empty:
+        st.write("### Raw Data")
+        st.dataframe(data)
+        
+        st.write("### Sensor Data Trends")
+        fig_temp = px.line(data, x='dateTime', y='temp', title='Temperature Over Time', labels={'temp': 'Temperature (°C)', 'dateTime': 'Timestamp'})
+        st.plotly_chart(fig_temp, use_container_width=True)
+        
+        fig_humi = px.line(data, x='dateTime', y='humi', title='Humidity Over Time', labels={'humi': 'Humidity (%)', 'dateTime': 'Timestamp'})
+        st.plotly_chart(fig_humi, use_container_width=True)
+        
+        fig_moi = px.line(data, x='dateTime', y='moi', title='Moisture Over Time', labels={'moi': 'Moisture (%)', 'dateTime': 'Timestamp'})
+        st.plotly_chart(fig_moi, use_container_width=True)
+    else:
+        st.error("No data available to display.")
 
 # Tab 3: About
 with tabs[2]:
