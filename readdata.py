@@ -49,6 +49,17 @@ with tabs[0]:
     st.subheader("Live Sensor Data")
     chart_data = get_data()
     st.line_chart(chart_data.set_index("Time"))
+    
+    # Show last sensor data in circles
+    last_data = chart_data.iloc[-1]
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric(label="Temperature", value=f"{last_data['Temperature']:.2f}°C")
+    with col2:
+        st.metric(label="Humidity", value=f"{last_data['Humidity']:.2f}%")
+    with col3:
+        st.metric(label="Moisture", value=f"{last_data['Moisture']:.2f}%")
 
 # Tab 2: Settings
 with tabs[1]:
