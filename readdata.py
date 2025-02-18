@@ -35,7 +35,7 @@ if login_button:
 # Function to display the home page
 def show_home_page():
     st.title("IoT-Based Smart Irrigation System")
-    st.image("smart_irrigation.jpg", use_container_width=True)
+    st.image("irrigation.jpeg", use_container_width=True)
     st.write(
         "This project is designed to automate irrigation by monitoring soil moisture, temperature, and humidity "
         "using IoT sensors. The collected data is processed to optimize water usage, improving agricultural efficiency."
