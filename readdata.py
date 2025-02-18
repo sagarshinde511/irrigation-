@@ -113,14 +113,16 @@ with tabs[1]:
         st.dataframe(data)
     else:
         st.error("No data available to display.")
+# Tab 3: About
 with tabs[2]:
     st.subheader("About")
     st.write("This dashboard visualizes IoT sensor data for temperature, humidity, and moisture.")
     
-    switch = st.select_slider(
-        "Activate System (0 = Off, 1 = On)", 
+    switch = st.radio(
+        "Activate System", 
         options=[0, 1],
-        value=0
+        index=0,
+        horizontal=True  # This makes it look more like a toggle button
     )
     
     if switch == 1:
