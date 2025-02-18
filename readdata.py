@@ -97,14 +97,11 @@ with tabs[1]:
         st.dataframe(data)
         
         st.write("### Sensor Data Trends")
-        fig_temp = px.line(data, x='dateTime', y='temp', title='Temperature Over Time', labels={'temp': 'Temperature (°C)', 'dateTime': 'Timestamp'})
-        st.plotly_chart(fig_temp, use_container_width=True)
-        
-        fig_humi = px.line(data, x='dateTime', y='humi', title='Humidity Over Time', labels={'humi': 'Humidity (%)', 'dateTime': 'Timestamp'})
-        st.plotly_chart(fig_humi, use_container_width=True)
-        
-        fig_moi = px.line(data, x='dateTime', y='moi', title='Moisture Over Time', labels={'moi': 'Moisture (%)', 'dateTime': 'Timestamp'})
-        st.plotly_chart(fig_moi, use_container_width=True)
+        fig = px.line(data.melt(id_vars=['dateTime'], var_name='Sensor', value_name='Value'), 
+                      x='dateTime', y='Value', color='Sensor', 
+                      title='Sensor Data Over Time', 
+                      labels={'Value': 'Sensor Readings', 'dateTime': 'Timestamp'})
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.error("No data available to display.")
 
