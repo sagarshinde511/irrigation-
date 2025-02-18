@@ -113,8 +113,12 @@ with tabs[1]:
         st.dataframe(data)
     else:
         st.error("No data available to display.")
-
-# Tab 3: About
 with tabs[2]:
     st.subheader("About")
     st.write("This dashboard visualizes IoT sensor data for temperature, humidity, and moisture.")
+    
+    if st.button("Show More Info"):
+        st.write(
+            "The system uses IoT sensors to collect real-time data and optimize irrigation. "
+            "It helps in efficient water usage by automatically controlling the irrigation system based on sensor data."
+        )
