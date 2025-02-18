@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import random
 import time
-import matplotlib.pyplot as plt
 
 # Default login credentials
 USERNAME = "admin"
@@ -61,17 +60,6 @@ with tabs[0]:
         st.metric(label="Humidity", value=f"{last_data['Humidity']:.2f}%")
     with col3:
         st.metric(label="Moisture", value=f"{last_data['Moisture']:.2f}%")
-    
-    # Pie chart visualization
-    st.subheader("Sensor Data Distribution")
-    labels = ["Temperature", "Humidity", "Moisture"]
-    values = [last_data["Temperature"], last_data["Humidity"], last_data["Moisture"]]
-    
-    fig, ax = plt.subplots()
-    ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, colors=["red", "blue", "green"])
-    ax.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
-    
-    st.pyplot(fig)
 
 # Tab 2: Settings
 with tabs[1]:
