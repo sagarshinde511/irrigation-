@@ -93,15 +93,15 @@ with tabs[1]:
     data = fetch_all_data()
     
     if data is not None and not data.empty:
-        st.write("### Raw Data")
-        st.dataframe(data)
-        
         st.write("### Sensor Data Trends")
         fig = px.line(data.melt(id_vars=['dateTime'], var_name='Sensor', value_name='Value'), 
                       x='dateTime', y='Value', color='Sensor', 
                       title='Sensor Data Over Time', 
                       labels={'Value': 'Sensor Readings', 'dateTime': 'Timestamp'})
         st.plotly_chart(fig, use_container_width=True)
+        
+        st.write("### Raw Data")
+        st.dataframe(data)
     else:
         st.error("No data available to display.")
 
