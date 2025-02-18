@@ -42,7 +42,7 @@ def fetch_latest_data():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT id, time, temp, humi, moi FROM Irrigation ORDER BY id DESC LIMIT 1")
+        cursor.execute("SELECT id, time, dateTemp, humi, moi FROM Irrigation ORDER BY id DESC LIMIT 1")
         latest_data = cursor.fetchone()
         cursor.close()
         conn.close()
