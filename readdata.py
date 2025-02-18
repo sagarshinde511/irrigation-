@@ -61,18 +61,20 @@ with tabs[0]:
     latest_data = fetch_latest_data()
     
     if latest_data:
-        st.write(f"**Latest Data Timestamp:** {latest_data['time']}")
+        # Ensure 'time' exists before accessing it
+        timestamp = latest_data.get('time', 'N/A')  
+        st.write(f"**Latest Data Timestamp:** {timestamp}")
+
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.metric(label="Temperature", value=f"{latest_data['temp']}°C")
+            st.metric(label="Temperature", value=f"{latest_data.get('temp', 'N/A')}°C")
         with col2:
-            st.metric(label="Humidity", value=f"{latest_data['humi']}%")
+            st.metric(label="Humidity", value=f"{latest_data.get('humi', 'N/A')}%")
         with col3:
-            st.metric(label="Moisture", value=f"{latest_data['moi']}%")
+            st.metric(label="Moisture", value=f"{latest_data.get('moi', 'N/A')}%")
     else:
         st.error("Failed to fetch latest sensor data.")
-
 # Tab 2: Settings
 with tabs[1]:
     st.subheader("Settings")
