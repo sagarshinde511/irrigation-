@@ -32,9 +32,18 @@ if login_button:
     else:
         st.sidebar.error("Invalid Credentials")
 
-# If not logged in, stop execution
+# Function to display the home page
+def show_home_page():
+    st.title("IoT-Based Smart Irrigation System")
+    st.image("smart_irrigation.jpg", use_column_width=True)
+    st.write(
+        "This project is designed to automate irrigation by monitoring soil moisture, temperature, and humidity "
+        "using IoT sensors. The collected data is processed to optimize water usage, improving agricultural efficiency."
+    )
+
+# If not logged in, show home page and stop execution
 if not st.session_state.authenticated:
-    st.warning("Please log in to access the dashboard.")
+    show_home_page()
     st.stop()
 
 # Function to fetch latest sensor data
