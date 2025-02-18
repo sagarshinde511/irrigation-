@@ -117,13 +117,13 @@ with tabs[2]:
     st.subheader("About")
     st.write("This dashboard visualizes IoT sensor data for temperature, humidity, and moisture.")
     
-    water_threshold = st.slider("Select Water Level Threshold (%)", min_value=0, max_value=100, value=50)
+    switch = st.select_slider(
+        "Activate System (0 = Off, 1 = On)", 
+        options=[0, 1],
+        value=0
+    )
     
-    st.write(f"Current threshold set to: {water_threshold}%")
-    
-    if water_threshold > 70:
-        st.write("Warning: High water level detected. Reduce irrigation!")
-    elif water_threshold < 30:
-        st.write("Warning: Low water level detected. Increase irrigation!")
+    if switch == 1:
+        st.write("System is Activated!")
     else:
-        st.write("Water level is optimal.")
+        st.write("System is Deactivated.")
