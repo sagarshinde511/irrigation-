@@ -73,10 +73,21 @@ def fetch_all_data():
     except mysql.connector.Error as e:
         st.error(f"Error connecting to database: {e}")
         return None
+def update_motor_state(state):
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE MotorControl SET state = %s WHERE id = 1", (state,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        st.success(f"Motor state updated successfully to {'ON' if state == 1 else 'OFF'}")
+    except mysql.connector.Error as e:
+        st.error(f"Error updating motor state: {e}")
 
 # Main content after login
 st.title("IoT Sensor Dashboard")
-tabs = st.tabs(["Dashboard", "All Data", "About"])
+tabs = st.tabs(["Dashboard", "All Data", "WaterPump"])
 
 # Tab 1: Dashboard
 with tabs[0]:
@@ -115,17 +126,17 @@ with tabs[1]:
         st.error("No data available to display.")
 # Tab 3: About
 with tabs[2]:
-    st.subheader("About")
-    st.write("This dashboard visualizes IoT sensor data for temperature, humidity, and moisture.")
-    
+    st.subheader("Control Water Pump")    
     switch = st.radio(
-        "Activate System", 
+        "1 TurnOn,  0 TurnOoff", 
         options=[0, 1],
         index=0,
         horizontal=True  # This makes it look more like a toggle button
     )
     
+    update_motor_state(switch)
     if switch == 1:
-        st.write("System is Activated!")
+        st.write("Motor Is ON")
+        
     else:
-        st.write("System is Deactivated.")
+        st.write("Motor is OFF")
